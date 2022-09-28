@@ -6,6 +6,8 @@ BLACK = (0,0,0)
 WHITE = (255,255,255)
 size = (700, 500)
 
+bounceable = True
+
 pygame.init()
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Pong")
@@ -57,17 +59,23 @@ while game_loop:
     if ball.rect.x>=690:
         scoreA+=1
         ball.velocity[0] = -ball.velocity[0]
+        bounceable = False
     if ball.rect.x<=0:
         scoreB+=1
         ball.velocity[0] = -ball.velocity[0]
+        bounceable = False
     if ball.rect.y>490:
         ball.velocity[1] = -ball.velocity[1]
     if ball.rect.y<0:
         ball.velocity[1] = -ball.velocity[1]     
 
     if pygame.sprite.collide_mask(ball, paddleA) or pygame.sprite.collide_mask(ball, paddleB):
-        ball.bounce()
+        if bounceable:
+            ball.bounce()
 
+    if ball.rect.x > 340 and ball.rect.x < 460:
+        bounceable = True
+    
     screen.fill(BLACK)
     pygame.draw.line(screen, WHITE, [349, 0], [349, 500], 5)
     
